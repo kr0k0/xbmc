@@ -55,6 +55,8 @@ using namespace std;
 #define LOCALISED_ID_TV_AVR       36039
 #define LOCALISED_ID_NONE         231
 
+#define LOCALISED_STOP_VIDEO      13006
+
 /* time in seconds to suppress source activation after receiving OnStop */
 #define CEC_SUPPRESS_ACTIVATE_SOURCE_AFTER_ON_STOP 2
 
@@ -630,6 +632,8 @@ int CPeripheralCecAdapter::CecCommand(void *cbParam, const cec_command command)
           g_application.ExecuteXBMCAction("Suspend");
         else if (adapter->m_configuration.bShutdownOnStandby == 1)
           g_application.ExecuteXBMCAction("Shutdown");
+        else if (adapter->GetSettingInt("standby_pc_on_tv_standby") == LOCALISED_STOP_VIDEO)
+          if (g_application.m_pPlayer->IsPlayingVideo()) g_application.StopPlaying();
       }
       break;
     case CEC_OPCODE_SET_MENU_LANGUAGE:
